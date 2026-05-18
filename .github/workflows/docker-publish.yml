@@ -15,5 +15,6 @@ jobs:
         
       - name: Build and Push Backend
         run: |
-          docker build -t ghcr.io/${{ github.repository }}/backend:latest ./devops-final-be
-          docker push ghcr.io/${{ github.repository }}/backend:latest
+          REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          docker build -t ghcr.io/$REPO_LOWER/backend:latest ./devops-final-be
+          docker push ghcr.io/$REPO_LOWER/backend:latest
