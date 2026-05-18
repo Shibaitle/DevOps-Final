@@ -1,4 +1,10 @@
+'use client';
+
+import { useAuth } from "@/hooks/useAuth";
+
 export default function ProfilePage() {
+  const { user } = useAuth();
+
   return (
     <div className="space-y-6">
       <header>
@@ -11,35 +17,40 @@ export default function ProfilePage() {
           <div>
             <label className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">First Name</label>
             <input
-              className="mt-2 w-full rounded-lg border border-[var(--border)] bg-[var(--surface-2)] px-4 py-3 text-sm text-white"
-              defaultValue="Kaho"
+              className="mt-2 w-full rounded-lg border border-[var(--border)] bg-[var(--surface-2)] px-4 py-3 text-sm text-white/70"
+              value={user?.first_name || ""}
+              readOnly
+              disabled
             />
           </div>
           <div>
             <label className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Last Name</label>
             <input
-              className="mt-2 w-full rounded-lg border border-[var(--border)] bg-[var(--surface-2)] px-4 py-3 text-sm text-white"
-              defaultValue="Koyanagi"
+              className="mt-2 w-full rounded-lg border border-[var(--border)] bg-[var(--surface-2)] px-4 py-3 text-sm text-white/70"
+              value={user?.last_name || ""}
+              readOnly
+              disabled
             />
           </div>
           <div>
             <label className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Email</label>
             <input
-              className="mt-2 w-full rounded-lg border border-[var(--border)] bg-[var(--surface-2)] px-4 py-3 text-sm text-white"
-              defaultValue="kaho@example.com"
+              className="mt-2 w-full rounded-lg border border-[var(--border)] bg-[var(--surface-2)] px-4 py-3 text-sm text-white/70"
+              value={user?.email || ""}
+              readOnly
+              disabled
             />
           </div>
           <div>
             <label className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Role</label>
             <input
-              className="mt-2 w-full rounded-lg border border-[var(--border)] bg-[var(--surface-2)] px-4 py-3 text-sm text-white"
-              defaultValue="Admin"
+              className="mt-2 w-full rounded-lg border border-[var(--border)] bg-[var(--surface-2)] px-4 py-3 text-sm text-white/70 capitalize"
+              value={user?.role_name || ""}
+              readOnly
+              disabled
             />
           </div>
         </div>
-        <button className="mt-6 rounded-lg bg-[var(--accent)] px-4 py-2 text-xs font-semibold text-black">
-          Save Changes
-        </button>
       </div>
     </div>
   );

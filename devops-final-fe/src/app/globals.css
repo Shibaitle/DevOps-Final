@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -34,7 +35,7 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   color: var(--foreground);
-  font-family: var(--font-kanit), system-ui, sans-serif;
+  font-family: 'Kanit', system-ui, -apple-system, sans-serif;
 }
 
 .page-shell {

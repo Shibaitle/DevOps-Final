@@ -1,13 +1,6 @@
 import type { Metadata } from "next";
-import { Kanit } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui/toast";
-
-const kanit = Kanit({
-  weight: ['300', '400', '500', '600', '700'],
-  subsets: ["latin", "thai"],
-  variable: "--font-kanit",
-});
 
 export const metadata: Metadata = {
   title: "ForgeStock Warehouse",
@@ -24,9 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${kanit.variable} antialiased`}
-      >
+      <body className="antialiased">
         <ToastProvider>
           {children}
         </ToastProvider>

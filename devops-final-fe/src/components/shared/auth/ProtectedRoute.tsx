@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
@@ -25,9 +25,14 @@ const DEFAULT_ROLE_ROUTES: Record<string, string> = {
 export function ProtectedRoute({ children, redirectTo = '/login', allowedRoles = [], roleRoutes = DEFAULT_ROLE_ROUTES }: ProtectedRouteProps) {
   const { user, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (isLoading) return;
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted || isLoading) return;
 
     if (!isAuthenticated) {
       router.push(redirectTo);
@@ -43,10 +48,10 @@ export function ProtectedRoute({ children, redirectTo = '/login', allowedRoles =
         router.push(targetRoute);
       }
     }
-  }, [allowedRoles, isAuthenticated, isLoading, redirectTo, roleRoutes, router, user?.role_name]);
+  }, [mounted, allowedRoles, isAuthenticated, isLoading, redirectTo, roleRoutes, router, user?.role_name]);
 
   // Show loading state while checking authentication/role
-  if (isLoading) {
+  if (!mounted || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">

@@ -2,7 +2,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, LogOut, Menu, User } from "lucide-react";
+import { ChevronDown, LogOut, Menu, User, Package } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { DEFAULT_PROFILE_IMAGE, resolveProfileImage } from "@/lib/profile-image";
@@ -61,8 +61,8 @@ function NavbarLogo({ role }: { role?: string }) {
       className="flex items-center gap-2"
       aria-label="Go to dashboard"
     >
-      <div className="relative h-9 w-9 shrink-0 rounded-xl bg-[var(--surface-3)] p-1">
-        <Image src="/logo.png" alt="ForgeStock Logo" fill className="object-contain" priority />
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--surface-3)] p-1 text-[var(--accent)]">
+        <Package size={22} className="animate-pulse" />
       </div>
       <div className="hidden sm:flex flex-col leading-tight">
         <span className="text-sm font-semibold tracking-wide">ForgeStock</span>
