@@ -41,4 +41,4 @@ bun dev
 
 ### Login
 - **Username:** `admin` (or `admin@warehouse.com`)
-- **Password:** `password123`
+- **Password:** `password`
