@@ -14,7 +14,7 @@ type User struct {
 	Nickname     string    `json:"nickname" gorm:"default:null"`
 	Gender       string    `json:"gender" gorm:"default:null"`
 	Phone        string    `json:"phone" gorm:"default:null"`
-	ProfileImage string    `json:"profile_image" gorm:"default:https://www.isranews.org/article/images/2025/Harry/6/Hun_Sen_July_2019.jpg"`
+	ProfileImage string    `json:"profile_image" gorm:"default:https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=256"`
 	CreatedAt    time.Time `json:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at"`
 

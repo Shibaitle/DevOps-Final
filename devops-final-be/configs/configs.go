@@ -57,13 +57,14 @@ type Mail struct {
 }
 
 type SeedAdmin struct {
-	Username  string
-	Email     string
-	Password  string
-	RoleName  string
-	FirstName string
-	LastName  string
-	Nickname  string
+	Username     string
+	Email        string
+	Password     string
+	RoleName     string
+	FirstName    string
+	LastName     string
+	Nickname     string
+	ProfileImage string
 }
 
 func LoadConfigs() *Configs {
@@ -126,13 +127,14 @@ func LoadConfigs() *Configs {
 			Key:    os.Getenv("APP_PASSWORD"),
 		},
 		SeedAdmin: SeedAdmin{
-			Username:  getEnv("ADMIN_USERNAME", "admin"),
-			Email:     getEnv("ADMIN_EMAIL", "admin@example.com"),
-			Password:  getEnv("ADMIN_PASSWORD", "password"),
-			RoleName:  getEnv("ROLE_NAME", "Admin"),
-			FirstName: getEnv("FIRST_NAME", "Admin"),
-			LastName:  getEnv("LAST_NAME", "User"),
-			Nickname:  getEnv("NICKNAME", "Admin"),
+			Username:     getEnv("ADMIN_USERNAME", "admin"),
+			Email:        getEnv("ADMIN_EMAIL", "admin@example.com"),
+			Password:     getEnv("ADMIN_PASSWORD", "password"),
+			RoleName:     getEnv("ROLE_NAME", "Admin"),
+			FirstName:    getEnv("FIRST_NAME", "Admin"),
+			LastName:     getEnv("LAST_NAME", "User"),
+			Nickname:     getEnv("NICKNAME", "Admin"),
+			ProfileImage: getEnv("ADMIN_PROFILE_IMAGE", ""),
 		},
 	}
 }

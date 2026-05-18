@@ -30,7 +30,7 @@ CREATE TABLE "users" (
   "nickname" text NULL,
   "gender" text NULL,
   "phone" text NULL,
-  "profile_image" text NULL DEFAULT 'https://www.isranews.org/article/images/2025/Harry/6/Hun_Sen_July_2019.jpg',
+  "profile_image" text NULL DEFAULT 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=256',
   "created_at" timestamptz NULL,
   "updated_at" timestamptz NULL,
   PRIMARY KEY ("id"),

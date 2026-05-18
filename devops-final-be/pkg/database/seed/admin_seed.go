@@ -22,7 +22,16 @@ func SeedAdminUser(db *gorm.DB, seedAdmin configs.SeedAdmin) {
 
 	var existingAdmin entities.User
 	if err := db.Where("username = ? OR email = ?", seedAdmin.Username, seedAdmin.Email).First(&existingAdmin).Error; err == nil {
-		log.Println("⏭️  Admin user already exists.")
+		log.Println("⏭️  Admin user already exists. Syncing/updating details...")
+		existingAdmin.FirstName = seedAdmin.FirstName
+		existingAdmin.LastName = seedAdmin.LastName
+		existingAdmin.Nickname = seedAdmin.Nickname
+		existingAdmin.ProfileImage = seedAdmin.ProfileImage
+		if err := db.Save(&existingAdmin).Error; err != nil {
+			log.Printf("❌ Failed to update existing Admin user details: %v", err)
+		} else {
+			log.Println("✅ Updated/Synced Admin user details successfully!")
+		}
 		return
 	}
 
@@ -39,15 +48,16 @@ func SeedAdminUser(db *gorm.DB, seedAdmin configs.SeedAdmin) {
 	}
 
 	adminUser := entities.User{
-		ID:        uuid.New().String(),
-		Username:  seedAdmin.Username,
-		Email:     seedAdmin.Email,
-		Password:  string(hashedPassword),
-		RoleID:    adminRole.ID,
-		IsApprove: true,
-		FirstName: seedAdmin.FirstName,
-		LastName:  seedAdmin.LastName,
-		Nickname:  seedAdmin.Nickname,
+		ID:           uuid.New().String(),
+		Username:     seedAdmin.Username,
+		Email:        seedAdmin.Email,
+		Password:     string(hashedPassword),
+		RoleID:       adminRole.ID,
+		IsApprove:    true,
+		FirstName:    seedAdmin.FirstName,
+		LastName:     seedAdmin.LastName,
+		Nickname:     seedAdmin.Nickname,
+		ProfileImage: seedAdmin.ProfileImage,
 	}
 
 	if err := db.Create(&adminUser).Error; err != nil {
