@@ -1,0 +1,21 @@
+# Root-level ignore rules for the DevOps demo repo
+
+# Build artifacts
+**/.next/
+**/*.tsbuildinfo
+**/coverage.out
+**/*.test
+**/*.out
+**/*.tmp
+**/*.log
+
+# IDE and OS noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Binary artifacts
+**/*.exe
+
+SRS.md
