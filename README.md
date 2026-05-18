@@ -8,7 +8,6 @@ Warehouse management demo workspace for the rebranded frontend and backend servi
 - Docker & Docker Compose
 - Go 1.21+
 - [Atlas CLI](https://atlasgo.io/getting-started) (for database migrations)
-- Air (Live reload for Go)
 
 ### 2. Database & Environment Setup
 Navigate to the `devops-final-be` folder and set up the `.env.dev` file. Ensure `DB_NAME=devops_final_dev`.
