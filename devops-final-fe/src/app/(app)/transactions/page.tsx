@@ -48,7 +48,7 @@ export default function TransactionsPage() {
   // Rejection Form State
   const [rejectReason, setRejectReason] = useState("");
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await warehouseService.getTransactions({
@@ -56,18 +56,19 @@ export default function TransactionsPage() {
         type: typeFilter === "ALL" ? undefined : typeFilter
       });
       setTransactions(data || []);
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Error",
-        message: err?.response?.data?.message || "Failed to load transactions queue",
+        message: error?.response?.data?.message || "Failed to load transactions queue",
         type: "error"
       });
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [statusFilter, typeFilter, showToast]);
 
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     try {
       const data = await warehouseService.getItems();
       setItems(data || []);
@@ -77,15 +78,15 @@ export default function TransactionsPage() {
     } catch (err) {
       console.error("Failed to load warehouse items for dropdown", err);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchTransactions();
-  }, [statusFilter, typeFilter]);
+  }, [fetchTransactions]);
 
   useEffect(() => {
     fetchItems();
-  }, []);
+  }, [fetchItems]);
 
   // Approve Transaction Handler
   const handleApprove = async (id: string) => {
@@ -93,10 +94,11 @@ export default function TransactionsPage() {
       await warehouseService.approveTransactions([id]);
       showToast({ title: "Approved", message: "Transaction approved successfully", type: "success" });
       fetchTransactions();
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Approval Failed",
-        message: err?.response?.data?.message || "Failed to approve transaction",
+        message: error?.response?.data?.message || "Failed to approve transaction",
         type: "error"
       });
     }
@@ -117,10 +119,11 @@ export default function TransactionsPage() {
       setSelectedTxId(null);
       setRejectReason("");
       fetchTransactions();
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Rejection Failed",
-        message: err?.response?.data?.message || "Failed to reject transaction",
+        message: error?.response?.data?.message || "Failed to reject transaction",
         type: "error"
       });
     }
@@ -154,10 +157,11 @@ export default function TransactionsPage() {
       setShowNewTxModal(false);
       setTxQty(1);
       fetchTransactions();
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Transaction Failed",
-        message: err?.response?.data?.message || "Failed to create transaction",
+        message: error?.response?.data?.message || "Failed to create transaction",
         type: "error"
       });
     }

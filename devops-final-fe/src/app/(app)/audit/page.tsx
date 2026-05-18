@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { 
-  Search, Loader2, Info, X, Clock, ShieldAlert, ArrowRight, Eye 
+  Search, Loader2, X, ShieldAlert, ArrowRight, Eye 
 } from "lucide-react";
 import { auditService, type AuditLog } from "@/services/audit.service";
 import { useToast } from "@/components/ui/toast";
@@ -26,7 +26,7 @@ export default function AuditPage() {
   const [search, setSearch] = useState("");
   const [selectedLog, setSelectedLog] = useState<AuditLog | null>(null);
 
-  const fetchLogs = async () => {
+  const fetchLogs = useCallback(async () => {
     setIsLoading(true);
     try {
       let data: AuditLog[] = [];
@@ -36,16 +36,17 @@ export default function AuditPage() {
         data = await auditService.getLogs();
       }
       setLogs(data || []);
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Forbidden",
-        message: err?.response?.data?.message || "Failed to load audit logs. Admin credentials required.",
+        message: error?.response?.data?.message || "Failed to load audit logs. Admin credentials required.",
         type: "error"
       });
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [search, showToast]);
 
   useEffect(() => {
     if (isAdmin) {
@@ -53,7 +54,7 @@ export default function AuditPage() {
     } else {
       setIsLoading(false);
     }
-  }, [isAdmin]);
+  }, [isAdmin, fetchLogs]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();

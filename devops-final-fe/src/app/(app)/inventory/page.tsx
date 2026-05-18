@@ -1,16 +1,14 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { 
   Search, Plus, Edit2, Trash2, ArrowUpDown, Loader2, X 
 } from "lucide-react";
 import { warehouseService, type WarehouseItem, type WarehouseCategory } from "@/services/warehouse.service";
 import { useToast } from "@/components/ui/toast";
-import { useAuth } from "@/hooks/useAuth";
 
 export default function InventoryPage() {
-  const { user } = useAuth();
   const { showToast } = useToast();
 
   const [mounted, setMounted] = useState(false);
@@ -44,7 +42,7 @@ export default function InventoryPage() {
   const [adjustQty, setAdjustQty] = useState(1);
 
   // Fetch items
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await warehouseService.getItems({
@@ -52,20 +50,21 @@ export default function InventoryPage() {
         category: categoryFilter === "ALL" ? undefined : categoryFilter
       });
       setItems(data || []);
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Error",
-        message: err?.response?.data?.message || "Failed to load inventory items",
+        message: error?.response?.data?.message || "Failed to load inventory items",
         type: "error"
       });
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [search, categoryFilter, showToast]);
 
   useEffect(() => {
     fetchItems();
-  }, [categoryFilter]);
+  }, [fetchItems]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,10 +92,11 @@ export default function InventoryPage() {
       setShowAddModal(false);
       resetForm();
       fetchItems();
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Create Failed",
-        message: err?.response?.data?.message || "Failed to create item",
+        message: error?.response?.data?.message || "Failed to create item",
         type: "error"
       });
     }
@@ -119,10 +119,11 @@ export default function InventoryPage() {
       setShowEditModal(false);
       resetForm();
       fetchItems();
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Update Failed",
-        message: err?.response?.data?.message || "Failed to update item",
+        message: error?.response?.data?.message || "Failed to update item",
         type: "error"
       });
     }
@@ -135,10 +136,11 @@ export default function InventoryPage() {
       await warehouseService.deleteItem(id);
       showToast({ title: "Success", message: "Item deleted successfully", type: "success" });
       fetchItems();
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Delete Failed",
-        message: err?.response?.data?.message || "Failed to delete item",
+        message: error?.response?.data?.message || "Failed to delete item",
         type: "error"
       });
     }
@@ -165,10 +167,11 @@ export default function InventoryPage() {
       setShowAdjustModal(false);
       setAdjustQty(1);
       fetchItems();
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Adjustment Failed",
-        message: err?.response?.data?.message || "Failed to adjust stock",
+        message: error?.response?.data?.message || "Failed to adjust stock",
         type: "error"
       });
     }

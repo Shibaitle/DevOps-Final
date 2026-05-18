@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { 
-  UserPlus, ShieldCheck, ShieldAlert, Trash2, Loader2, Check, X, Search, Mail, User, Power
+  UserPlus, ShieldAlert, Trash2, Loader2, Check, X, Search, Mail, User, Power
 } from "lucide-react";
 import { adminService, type AdminUser } from "@/services/admin.service";
 import { authService } from "@/services/auth.service";
@@ -41,21 +41,22 @@ export default function UsersPage() {
   const [formGender, setFormGender] = useState("Other");
   const [formRole, setFormRole] = useState("warehouse");
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await adminService.getAllUsers();
       setUsersList(data || []);
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Access Denied",
-        message: err?.response?.data?.message || "Failed to load users list",
+        message: error?.response?.data?.message || "Failed to load users list",
         type: "error"
       });
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [showToast]);
 
   useEffect(() => {
     if (isAdmin) {
@@ -63,7 +64,7 @@ export default function UsersPage() {
     } else {
       setIsLoading(false);
     }
-  }, [isAdmin]);
+  }, [isAdmin, fetchUsers]);
 
   // Invite User Submission
   const handleInviteSubmit = async (e: React.FormEvent) => {
@@ -93,10 +94,11 @@ export default function UsersPage() {
       setShowInviteModal(false);
       resetForm();
       fetchUsers();
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Invite Failed",
-        message: err?.response?.data?.message || "Failed to invite new user",
+        message: error?.response?.data?.message || "Failed to invite new user",
         type: "error"
       });
     }
@@ -113,10 +115,11 @@ export default function UsersPage() {
         type: "success" 
       });
       fetchUsers();
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Update Failed",
-        message: err?.response?.data?.message || "Failed to change user approval status",
+        message: error?.response?.data?.message || "Failed to change user approval status",
         type: "error"
       });
     }
@@ -134,10 +137,11 @@ export default function UsersPage() {
       await adminService.deleteUser(targetUser.user_id);
       showToast({ title: "User Deleted", message: "Account removed successfully", type: "success" });
       fetchUsers();
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Deletion Failed",
-        message: err?.response?.data?.message || "Failed to delete user",
+        message: error?.response?.data?.message || "Failed to delete user",
         type: "error"
       });
     }

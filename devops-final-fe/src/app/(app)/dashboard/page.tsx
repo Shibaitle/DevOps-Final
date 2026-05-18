@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { 
   TrendingUp, AlertTriangle, ArrowRight, Layers, Loader2, ClipboardList, CheckCircle2, Clock, XCircle 
@@ -20,7 +20,7 @@ export default function DashboardPage() {
   const [transactions, setTransactions] = useState<WarehouseTransaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     setIsLoading(true);
     try {
       const [allItems, allTxs] = await Promise.all([
@@ -29,20 +29,21 @@ export default function DashboardPage() {
       ]);
       setItems(allItems || []);
       setTransactions(allTxs || []);
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
       showToast({
         title: "Error",
-        message: err?.response?.data?.message || "Failed to load dashboard data",
+        message: error?.response?.data?.message || "Failed to load dashboard data",
         type: "error"
       });
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [showToast]);
 
   useEffect(() => {
     fetchDashboardData();
-  }, []);
+  }, [fetchDashboardData]);
 
   // Calculate Stats
   const totalSKUs = items.length;
